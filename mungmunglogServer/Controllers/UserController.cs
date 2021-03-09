@@ -86,10 +86,10 @@ namespace mungmunglogServer.Controllers
                 var client = account.CreateCloudBlobClient();
                 var container = client.GetContainerReference("main");
 
-                var pictureId = path.Substring(path.LastIndexOf("/") + 1);
-                var picture = container.GetBlockBlobReference(pictureId);
+                var id = path.Substring(path.LastIndexOf("/") + 1);
+                var blob = container.GetBlockBlobReference(id);
 
-                await picture.DeleteIfExistsAsync();
+                await blob.DeleteIfExistsAsync();
             }
             catch (Exception exception)
             {
