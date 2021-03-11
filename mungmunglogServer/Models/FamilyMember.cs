@@ -17,6 +17,5 @@ namespace mungmunglogServer.Models
         public int FamilyId { get; set; }
         public Family Family { get; set; }
 
-       
     }
 }

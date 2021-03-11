@@ -16,6 +16,7 @@ namespace mungmunglogServer.Data
         public DbSet<Pet> Pet { get; set; }
         public DbSet<Family> Family { get; set; }
         public DbSet<FamilyMember> FamilyMember { get; set; }
+        public DbSet<History> History { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
