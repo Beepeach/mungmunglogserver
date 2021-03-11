@@ -17,17 +17,43 @@ namespace mungmunglogServer.Data
         public DbSet<Family> Family { get; set; }
         public DbSet<FamilyMember> FamilyMember { get; set; }
         public DbSet<History> History { get; set; }
+        public DbSet<WalkHistory> WalkHistory { get; set; }
+        public DbSet<WalkPath> WalkPath { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }
 
+        // 제대로 인식을 못할때 사용할 코드
+
         //protected override void OnModelCreating(ModelBuilder builder)
         //{
+        //    builder.Entity<Pet>()
+        //        .HasOne(pet => pet.Family)
+        //        .WithMany(family => family.Pets);
+
         //    builder.Entity<FamilyMember>()
         //        .HasOne(familyMember => familyMember.Family)
-        //        .WithMany(family => family)
+        //        .WithMany(family => family.FamilyMembers);
+
+        //    builder.Entity<History>()
+        //        .HasOne(history => history.Pet)
+        //        .WithMany(pet => pet.Histories);
+        //    builder.Entity<History>()
+        //      .HasOne(history => history.FamilyMember)
+        //      .WithMany(familyMember => familyMember.Histories);
+
+        //    builder.Entity<WalkHistory>()
+        //        .HasOne(walkHistory => walkHistory.Pet)
+        //        .WithMany(pet => pet.WalkHistories);
+        //    builder.Entity<WalkHistory>()
+        //        .HasOne(walkHistory => walkHistory.FamilyMember)
+        //        .WithMany(familyMember => familyMember.WalkHistories);
+
+        //    builder.Entity<WalkPath>()
+        //        .HasOne(walkPath => walkPath.WalkHistory)
+        //        .WithMany(walkHistory => walkHistory.walkPaths);
 
         //    base.OnModelCreating(builder);
         //}

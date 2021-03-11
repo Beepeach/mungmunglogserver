@@ -27,7 +27,10 @@ namespace mungmunglogServer.Models
         [NotMapped]
         public IFormFile AttachmentFile { get; set; }
 
-        // public List<History> Histories { get; set; }
-        // public List<WalkHistory> WalkHistories { get; set; }
+        public List<History> Histories { get; set; }
+        public List<WalkHistory> WalkHistories { get; set; }
+
+        public int FamilyId { get; set; }
+        public Family Family { get; set; }
     }
 }
