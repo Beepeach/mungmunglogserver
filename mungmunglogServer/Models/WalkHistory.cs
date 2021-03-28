@@ -46,6 +46,6 @@ namespace mungmunglogServer.Models
         public int FamilyMemberId { get; set; }
         public FamilyMember FamilyMember { get; set; }
 
-        public List<WalkPath> walkPaths { get; set; }
+        public List<WalkPath> WalkPaths { get; set; }
     }
 }
