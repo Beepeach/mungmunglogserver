@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using mungmunglogServer.Data;
 
@@ -18,13 +19,22 @@ namespace mungmunglogServer.Controllers
     {
         protected readonly UserManager<User> _userManager;
         protected readonly SignInManager<User> _signInManager;
+        protected readonly ApplicationDbContext _context;
         protected readonly IConfiguration _configuration;
+        protected readonly IHostEnvironment _hostEnvironment;
 
-        public CommonApiController(UserManager<User> userManager, SignInManager<User> signInManager, IConfiguration configuration)
+        public CommonApiController(UserManager<User> userManager,
+            SignInManager<User> signInManager,
+            ApplicationDbContext context,
+            IConfiguration configuration,
+            IHostEnvironment environment
+            )
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _context = context;
             _configuration = configuration;
+            _hostEnvironment = environment;
         }
 
         protected string GetApiToken(User user)

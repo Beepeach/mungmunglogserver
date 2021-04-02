@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+
 namespace mungmunglogServer.Models
 {
     public static class StatusCode
@@ -13,5 +15,17 @@ namespace mungmunglogServer.Models
     {
         public int Code { get; set; }
         public string Message { get; set; }
+    }
+
+    // 한가지를 리턴하는 Response
+    public class SingleResponse<T>: CommonResponse
+    {
+        public T Data { get; set; }
+    }
+
+    // list를 리턴하는 Response
+    public class ListResponse<T>: CommonResponse
+    {
+        public List<T> List { get; set; }
     }
 }

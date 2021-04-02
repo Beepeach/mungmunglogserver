@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using mungmunglogServer.Data;
 using mungmunglogServer.Models;
 
@@ -16,7 +17,11 @@ namespace mungmunglogServer.Controllers
     [ApiController]
     public class LoginApiController : CommonApiController
     {
-        public LoginApiController(UserManager<User> userManager, SignInManager<User> signInManager, IConfiguration configuration):base(userManager, signInManager, configuration)
+        public LoginApiController(UserManager<User> userManager,
+            SignInManager<User> signInManager,
+            ApplicationDbContext context,
+            IConfiguration configuration,
+            IHostEnvironment environment):base(userManager, signInManager, context, configuration, environment)
         {
 
         }
