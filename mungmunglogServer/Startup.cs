@@ -53,6 +53,21 @@ namespace mungmunglogServer
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtSecurityKey"]))
                 };
             });
+
+            // password 요구사항 지정
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequiredLength = 4;
+            });
+
+            // KakaoTalk 관리자페이지 로그인
+            services.AddAuthentication().AddKakaoTalk(options =>
+            {
+                options.ClientId = "c21b7a3b3d287e24904b0f47c9c233f5";
+                options.ClientSecret = "OzKoTXl3sXAzlHb8cWtFarn8hHUQTxoj";
+            });
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
