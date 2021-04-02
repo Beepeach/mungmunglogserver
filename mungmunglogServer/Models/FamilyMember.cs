@@ -14,7 +14,7 @@ namespace mungmunglogServer.Models
 
         public string UserId { get; set; }
 
-        public int FamilyId { get; set; }
+        public int? FamilyId { get; set; }
         public Family Family { get; set; }
 
         public List<History> Histories { get; set; }

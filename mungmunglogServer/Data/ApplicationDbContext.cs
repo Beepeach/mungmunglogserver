@@ -70,13 +70,14 @@ namespace mungmunglogServer.Data
         [MaxLength(15)]
         public string Relationship { get; set; }
         [Required]
+        // true - 남자, false - 여자
         public bool Gender { get; set; }
 
         public string FileUrl { get; set; }
         [NotMapped]
         public IFormFile AttachmentFile { get; set; }
 
-        public int FamilyId { get; set; }
+        public int? FamilyId { get; set; }
         public Family Family { get; set; }
     }
 }

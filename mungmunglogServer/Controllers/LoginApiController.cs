@@ -21,6 +21,7 @@ namespace mungmunglogServer.Controllers
 
         }
 
+
         [HttpPost("email")]
         public async Task<IActionResult> PostEmail(EmailLoginModel model)
         {
