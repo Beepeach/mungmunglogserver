@@ -7,7 +7,7 @@ namespace mungmunglogServer.Models
     {
         public const int Ok = 200;
         public const int NotFound = 404;
-        public const int Unknowb = -999;
+        public const int Unknown = -999;
         public const int Fail = -998;
     }
 
