@@ -33,4 +33,35 @@ namespace mungmunglogServer.Models
         public int FamilyId { get; set; }
         public Family Family { get; set; }
     }
+
+
+    public class PetDto
+    {
+        public PetDto(Pet pet)
+        {
+            DateTime baseDate = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            DateTime birthday = pet.Birthday;
+
+            long birthdayTicks = birthday.Ticks - baseDate.Ticks;
+
+            TimeSpan birthdaySpan = new TimeSpan(birthdayTicks);
+
+            PetId = pet.PetId;
+            Name = pet.Name;
+            Birthday = birthdaySpan.TotalSeconds;
+            Breed = pet.Breed;
+            Gender = pet.Gender;
+            FileUrl = pet.FileUrl;
+            FamilyId = pet.FamilyId;
+        }
+
+        public int PetId { get; set; }
+        public string Name { get; set; }
+        public double Birthday { get; set; }
+        public string Breed { get; set; }
+        public bool Gender { get; set; }
+        public string FileUrl { get; set; }
+
+        public int FamilyId { get; set; }
+    }
 }

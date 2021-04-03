@@ -80,4 +80,6 @@ namespace mungmunglogServer.Data
         public int? FamilyId { get; set; }
         public Family Family { get; set; }
     }
+
+    // UserDto를 만드는게 좋을까??
 }
