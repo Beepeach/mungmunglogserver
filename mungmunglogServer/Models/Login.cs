@@ -1,7 +1,7 @@
 ﻿using System;
 namespace mungmunglogServer.Models
 {
-    public class EmailLoginModel
+    public class EmailLoginRequestModel
     {
         public string Email { get; set; }
         public string Password { get; set; }

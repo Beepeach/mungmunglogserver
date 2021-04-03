@@ -28,7 +28,7 @@ namespace mungmunglogServer.Controllers
 
 
         [HttpPost("email")]
-        public async Task<IActionResult> PostEmail(EmailLoginModel model)
+        public async Task<IActionResult> PostEmail(EmailLoginRequestModel model)
         {
             var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
 
