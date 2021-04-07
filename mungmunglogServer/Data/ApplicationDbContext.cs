@@ -64,7 +64,7 @@ namespace mungmunglogServer.Data
 
         [Required]
         [MaxLength(15)]
-        public string NickName { get; set; }
+        public string Nickname { get; set; }
 
         [Required]
         [MaxLength(15)]

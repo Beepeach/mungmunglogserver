@@ -34,7 +34,7 @@ namespace mungmunglogServer.Controllers
         public async Task<ActionResult<ListResponse<User>>> GetUsers()
         {
             var users = await _context.Users
-                .OrderBy(u => u.NickName)
+                .OrderBy(u => u.Nickname)
                 .ThenBy(u => u.Id)
                 .ToListAsync();
 

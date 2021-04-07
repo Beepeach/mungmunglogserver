@@ -32,7 +32,7 @@ namespace mungmunglogServer.Controllers
             {
                 Email = "test1@test.com",
                 Id = "test1@test.com",
-                NickName = "TestUser",
+                Nickname = "TestUser",
                 Relationship = "Bro",
                 Gender = true,
                 UserName = "TestUser"
@@ -49,6 +49,7 @@ namespace mungmunglogServer.Controllers
                     {
                         Code = Models.StatusCode.Ok,
                         Message = "회원가입 성공",
+                        Email = dummyUser.Email,
                         UserId = dummyUser.Id,
                         Token = token
                     });
@@ -73,13 +74,13 @@ namespace mungmunglogServer.Controllers
 
 
         [HttpPost("email")]
-        public async Task<IActionResult> PostEmail(EmailJoinModel model)
+        public async Task<IActionResult> PostEmail(EmailJoinRequestModel model)
         {
             var newUser = new User
             {
                 Email = model.Email,
                 UserName = model.Email,
-                NickName = "",
+                Nickname = "",
                 Relationship = "",
                 Gender = true,
                 FileUrl = ""
@@ -95,6 +96,7 @@ namespace mungmunglogServer.Controllers
                     {
                         Code = Models.StatusCode.Ok,
                         Message = "회원가입 성공",
+                        Email = newUser.Email,
                         UserId = newUser.Id,
                         Token = token
                     });
@@ -115,14 +117,14 @@ namespace mungmunglogServer.Controllers
             });
         }
 
-        [HttpPost("emailinfo")]
-        public async Task<IActionResult> PostEmailInfo(EmailInfoJoinModel model)
+        [HttpPost("info")]
+        public async Task<IActionResult> PostInfo(JoinInfoRequestModel model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
 
             if(user != null)
             {
-                user.NickName = model.NickName;
+                user.Nickname = model.Nickname;
                 user.Relationship = model.Relationship;
                 user.Gender = model.Gender;
                 user.FileUrl = model.FileUrl;
@@ -132,7 +134,8 @@ namespace mungmunglogServer.Controllers
                 return Ok(new JoinResponseModel
                 {
                     Code = Models.StatusCode.Ok,
-                    Message = "정보 등록 성공"
+                    Message = "정보 등록 성공",
+                    Nickname = model.Nickname
                 });
             } else
             {

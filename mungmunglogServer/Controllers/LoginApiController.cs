@@ -21,7 +21,7 @@ namespace mungmunglogServer.Controllers
             SignInManager<User> signInManager,
             ApplicationDbContext context,
             IConfiguration configuration,
-            IHostEnvironment environment):base(userManager, signInManager, context, configuration, environment)
+            IHostEnvironment environment) : base(userManager, signInManager, context, configuration, environment)
         {
 
         }
@@ -45,6 +45,7 @@ namespace mungmunglogServer.Controllers
                         {
                             Code = Models.StatusCode.Ok,
                             Message = "Login Succeed",
+                            Email = model.Email,
                             UserId = user.Id,
                             Token = token
                         });
@@ -93,6 +94,7 @@ namespace mungmunglogServer.Controllers
                         {
                             Code = Models.StatusCode.Ok,
                             Message = "SNS 로그인 성공",
+                            Email = model.Email,
                             UserId = user.Id,
                             Token = token
                         });
@@ -108,16 +110,85 @@ namespace mungmunglogServer.Controllers
                     }
                 } else
                 {
-                    return Ok(new LoginResponseModel
+                    //kakao에서 메일을 받아올수 있을때 다시 FindByEmail
+                    var existingUser = await _userManager.FindByLoginAsync(model.Provider, model.Id); //.FindByEmailAsync(model.Email);
+
+                    if (existingUser != null)
                     {
-                        Code = Models.StatusCode.NotFound,
-                        Message = "사용자를 찾지 못함"
-                    });
+                        // 같은 메일이 존재하면 로그인 추가 기능은 어떻게 구현해야할까??
+
+                        return Ok(new LoginResponseModel
+                        {
+                            Code = Models.StatusCode.Fail,
+                            Message = "이미 가입한 계정입니다."
+                        });
+                    }
+
+                    var newUser = new User
+                    {
+                        Email = model.Email,
+                        UserName = model.Email,
+                        Nickname = "",
+                        Relationship = "",
+                        Gender = true,
+                        FileUrl = "",
+                        // 나중에 다시 구현 - model에 접근해서 인증
+                        EmailConfirmed = true
+                    };
+
+                    var createResult = await _userManager.CreateAsync(newUser);
+
+                    if (createResult.Succeeded)
+                    {
+                        var loginInfo = new UserLoginInfo(model.Provider, model.Id, model.Email);
+                        var addLoginResult = await _userManager.AddLoginAsync(newUser, loginInfo);
+
+                        if (addLoginResult.Succeeded)
+                        {
+                            var token = GetApiToken(newUser);
+
+                            if (!token.Contains("fail"))
+                            {
+                                return Ok(new LoginResponseModel
+                                {
+                                    Code = Models.StatusCode.Ok,
+                                    Message = "SNS 로그인 성공",
+                                    Email = newUser.Email,
+                                    UserId = newUser.Id,
+                                    Token = token
+                                });
+                            }
+                            else
+                            {
+                                return Ok(new LoginResponseModel
+                                {
+                                    Code = Models.StatusCode.Fail,
+                                    Message = "Token 생성 실패"
+                                });
+                            }
+                        }
+                        else
+                        {
+                            return Ok(new LoginResponseModel
+                            {
+                                Code = Models.StatusCode.Fail,
+                                Message = "로그인 생성 실패"
+                            });
+                        }
+                    }
+                    else
+                    {
+                        return Ok(new LoginResponseModel
+                        {
+                            Code = Models.StatusCode.Fail,
+                            Message = "유저 생성 실패"
+                        });
+                    }
                 }
-            }
-            else
+            } else
             {
-                var existingUser = await _userManager.FindByEmailAsync(model.Email);
+                //kakao에서 메일을 받아올수 있을때 다시 FindByEmail
+                var existingUser = await _userManager.FindByLoginAsync(model.Provider, model.Id); //.FindByEmailAsync(model.Email);
 
                 if (existingUser != null)
                 {
@@ -134,10 +205,11 @@ namespace mungmunglogServer.Controllers
                 {
                     Email = model.Email,
                     UserName = model.Email,
-                    NickName = "",
+                    Nickname = "",
                     Relationship = "",
                     Gender = true,
                     FileUrl = "",
+                    // 나중에 다시 구현 - model에 접근해서 인증
                     EmailConfirmed = true
                 };
 
@@ -158,6 +230,7 @@ namespace mungmunglogServer.Controllers
                             {
                                 Code = Models.StatusCode.Ok,
                                 Message = "SNS 로그인 성공",
+                                Email = newUser.Email,
                                 UserId = newUser.Id,
                                 Token = token
                             });
