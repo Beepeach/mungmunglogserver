@@ -76,6 +76,17 @@ namespace mungmunglogServer.Controllers
         [HttpPost("email")]
         public async Task<IActionResult> PostEmail(EmailJoinRequestModel model)
         {
+            var duplicationUser = await _userManager.FindByEmailAsync(model.Email);
+
+            if (duplicationUser != null)
+            {
+                return Ok(new JoinResponseModel
+                {
+                    Code = Models.StatusCode.FailWithDuplication,
+                    Message = "존재하는 메일입니다."
+                });
+            }
+
             var newUser = new User
             {
                 Email = model.Email,
@@ -112,7 +123,7 @@ namespace mungmunglogServer.Controllers
 
             return Ok(new JoinResponseModel
             {
-                Code = Models.StatusCode.Fail,
+                Code = Models.StatusCode.Unknown,
                 Message = result.Errors.FirstOrDefault()?.Description
             });
         }

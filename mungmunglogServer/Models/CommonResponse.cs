@@ -9,6 +9,7 @@ namespace mungmunglogServer.Models
         public const int NotFound = 404;
         public const int Unknown = -999;
         public const int Fail = -998;
+        public const int FailWithDuplication = -997;
     }
 
     public class CommonResponse
