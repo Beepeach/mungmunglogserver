@@ -64,4 +64,19 @@ namespace mungmunglogServer.Models
 
         public int FamilyId { get; set; }
     }
+
+    public class PetPostModel
+    {
+        public string Email { get; set; }
+        public string Name { get; set; }
+        public double Birthday { get; set; }
+        public string Breed { get; set; }
+        public bool Gender { get; set; }
+        public string FileUrl { get; set; }
+    }
+
+    public class PetPutModel: PetPostModel
+    {
+
+    }
 }
