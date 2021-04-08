@@ -58,6 +58,9 @@ namespace mungmunglogServer
             services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequiredLength = 4;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
             });
 
             // KakaoTalk 관리자페이지 로그인

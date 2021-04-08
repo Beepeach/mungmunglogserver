@@ -94,7 +94,10 @@ namespace mungmunglogServer.Controllers
                 Nickname = "",
                 Relationship = "",
                 Gender = true,
-                FileUrl = ""
+                FileUrl = "",
+
+                // 이메일 검증은 추후에 변경
+                EmailConfirmed = true
             };
 
             var result = await _userManager.CreateAsync(newUser, model.Password);

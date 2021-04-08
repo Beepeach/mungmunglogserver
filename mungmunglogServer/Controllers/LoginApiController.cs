@@ -30,43 +30,42 @@ namespace mungmunglogServer.Controllers
         [HttpPost("email")]
         public async Task<IActionResult> PostEmail(EmailLoginRequestModel model)
         {
+            var existingUser = await _userManager.FindByEmailAsync(model.Email);
+
+            if (existingUser == null)
+            {
+                return Ok(new LoginResponseModel
+                {
+                    Code = Models.StatusCode.NotFound,
+                    Message = "Not Found User"
+                });
+            }
+
             var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
 
             if (result.Succeeded)
             {
-                var user = await _userManager.FindByEmailAsync(model.Email);
-
-                if (user != null)
+                var token = GetApiToken(existingUser);
+                if (!token.Contains("fail"))
                 {
-                    var token = GetApiToken(user);
-                    if (!token.Contains("fail"))
+                    return Ok(new LoginResponseModel
                     {
-                        return Ok(new LoginResponseModel
-                        {
-                            Code = Models.StatusCode.Ok,
-                            Message = "Login Succeed",
-                            Email = model.Email,
-                            UserId = user.Id,
-                            Token = token
-                        });
-                    }
-                    else
-                    {
-                        return Ok(new LoginResponseModel
-                        {
-                            Code = Models.StatusCode.Fail,
-                            Message = "Fail to Create Token"
-                        });
-                    }
+                        Code = Models.StatusCode.Ok,
+                        Message = "Login Succeed",
+                        Email = model.Email,
+                        UserId = existingUser.Id,
+                        Token = token
+                    });
                 }
                 else
                 {
                     return Ok(new LoginResponseModel
                     {
-                        Code = Models.StatusCode.NotFound,
-                        Message = "Not Found User"
+                        Code = Models.StatusCode.TokenError,
+                        Message = "Fail to Create Token"
                     });
                 }
+
             }
 
             return Ok(new LoginResponseModel
@@ -104,11 +103,12 @@ namespace mungmunglogServer.Controllers
                     {
                         return Ok(new LoginResponseModel
                         {
-                            Code = Models.StatusCode.Fail,
+                            Code = Models.StatusCode.TokenError,
                             Message = "Token 생성 실패"
                         });
                     }
-                } else
+                }
+                else
                 {
                     //kakao에서 메일을 받아올수 있을때 다시 FindByEmail
                     var existingUser = await _userManager.FindByLoginAsync(model.Provider, model.Id); //.FindByEmailAsync(model.Email);
@@ -185,7 +185,8 @@ namespace mungmunglogServer.Controllers
                         });
                     }
                 }
-            } else
+            }
+            else
             {
                 //kakao에서 메일을 받아올수 있을때 다시 FindByEmail
                 var existingUser = await _userManager.FindByLoginAsync(model.Provider, model.Id); //.FindByEmailAsync(model.Email);

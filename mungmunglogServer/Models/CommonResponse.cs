@@ -10,6 +10,7 @@ namespace mungmunglogServer.Models
         public const int Unknown = -999;
         public const int Fail = -998;
         public const int FailWithDuplication = -997;
+        public const int TokenError = -996;
     }
 
     public class CommonResponse
