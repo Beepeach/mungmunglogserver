@@ -10,7 +10,7 @@ using mungmunglogServer.Models;
 
 namespace mungmunglogServer.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/family")]
     [ApiController]
     public class FamilyApiController : ControllerBase
     {
@@ -21,14 +21,24 @@ namespace mungmunglogServer.Controllers
             _context = context;
         }
 
-        // GET: api/FamilyApi
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Family>>> GetFamily()
-        {
-            return await _context.Family.ToListAsync();
-        }
+        // 잠시 보류
+        //// GET: api/family/list
+        //[HttpGet("list")]
+        //public async Task<ActionResult<ListResponse<Family>>> GetFamily(int familyMemberId)
+        //{
+        //    var familyMember = await _context.Family.fin
 
-        // GET: api/FamilyApi/5
+        //    return await _context.Family.ToListAsync();
+        //}
+
+        //// GET: api/family/list
+        //[HttpGet("list/master")]
+        //public async Task<ActionResult<ListResponse<Family>>> GetMasterFamily()
+        //{
+        //    return await _context.Family.ToListAsync();
+        //}
+
+        // GET: api/family/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Family>> GetFamily(int id)
         {
@@ -38,66 +48,6 @@ namespace mungmunglogServer.Controllers
             {
                 return NotFound();
             }
-
-            return family;
-        }
-
-        // PUT: api/FamilyApi/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutFamily(int id, Family family)
-        {
-            if (id != family.FamilyId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(family).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!FamilyExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/FamilyApi
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPost]
-        public async Task<ActionResult<Family>> PostFamily(Family family)
-        {
-            _context.Family.Add(family);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetFamily", new { id = family.FamilyId }, family);
-        }
-
-        // DELETE: api/FamilyApi/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Family>> DeleteFamily(int id)
-        {
-            var family = await _context.Family.FindAsync(id);
-            if (family == null)
-            {
-                return NotFound();
-            }
-
-            _context.Family.Remove(family);
-            await _context.SaveChangesAsync();
 
             return family;
         }

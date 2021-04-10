@@ -77,9 +77,8 @@ namespace mungmunglogServer.Data
         [NotMapped]
         public IFormFile AttachmentFile { get; set; }
 
+        // 현재는 1 계정당 1 Family만 허용이 된다.
         public int? FamilyId { get; set; }
         public Family Family { get; set; }
     }
-
-    // UserDto를 만드는게 좋을까??
 }

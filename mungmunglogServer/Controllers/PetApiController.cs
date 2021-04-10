@@ -156,6 +156,7 @@ namespace mungmunglogServer.Controllers
                 FamilyId = family.FamilyId
             };
 
+            // 현재는 1계정에 1가지의 Family만 허용이 된다.
             user.FamilyId = family.FamilyId;
 
             _context.FamilyMember.Add(familyMember);
