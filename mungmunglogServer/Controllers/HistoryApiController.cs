@@ -50,7 +50,7 @@ namespace mungmunglogServer.Controllers
         }
 
         // GET: api/history/list/member/{memberId}
-        [HttpGet("list/member/{petId}")]
+        [HttpGet("list/member/{memberId}")]
         public async Task<ActionResult<ListResponse<HistoryDto>>> GetMemberHistories(int memberId)
         {
             var histories = await _context.History
@@ -163,6 +163,32 @@ namespace mungmunglogServer.Controllers
         [HttpPost]
         public async Task<ActionResult<SingleResponse<HistoryDto>>> PostHistory(HistoryPostModel model)
         {
+            var pet = await _context.Pet
+                .Where(p => p.PetId == model.PetId)
+                .FirstOrDefaultAsync();
+
+            if (pet == null)
+            {
+                return new SingleResponse<HistoryDto>
+                {
+                    Code = Models.StatusCode.NotFound,
+                    Message = "Not Found The Pet"
+                };
+            }
+
+            var familyMember = await _context.FamilyMember.
+                Where(m => m.FamilyMemberId == model.FamilyMemberId)
+                .FirstOrDefaultAsync();
+
+            if (familyMember == null)
+            {
+                return new SingleResponse<HistoryDto>
+                {
+                    Code = Models.StatusCode.NotFound,
+                    Message = "Not Found The FamilyMember"
+                };
+            }
+
             var newHistory = new History
             {
                 Type = model.Type,
@@ -178,8 +204,12 @@ namespace mungmunglogServer.Controllers
                 FamilyMemberId = model.FamilyMemberId
             };
 
-
             _context.History.Add(newHistory);
+            await _context.SaveChangesAsync();
+
+            pet.Histories.Add(newHistory);
+            familyMember.Histories.Add(newHistory);
+
             await _context.SaveChangesAsync();
 
             return new SingleResponse<HistoryDto>
