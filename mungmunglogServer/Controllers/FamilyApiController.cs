@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using mungmunglogServer.Data;
 using mungmunglogServer.Models;
 
@@ -12,13 +15,16 @@ namespace mungmunglogServer.Controllers
 {
     [Route("api/family")]
     [ApiController]
-    public class FamilyApiController : ControllerBase
+    public class FamilyApiController : CommonApiController
     {
-        private readonly ApplicationDbContext _context;
-
-        public FamilyApiController(ApplicationDbContext context)
+    
+        public FamilyApiController(UserManager<User> userManager,
+            SignInManager<User> signInManager,
+            ApplicationDbContext context,
+            IConfiguration configuration,
+            IHostEnvironment environment) : base(userManager, signInManager, context, configuration, environment)
         {
-            _context = context;
+
         }
 
         // 잠시 보류
@@ -86,6 +92,51 @@ namespace mungmunglogServer.Controllers
                 Code = Models.StatusCode.Ok,
                 Message = "Success",
                 Data = family.InvitationCode
+            });
+        }
+
+        [HttpPost("invitation")]
+        public async Task<ActionResult<CommonResponse>> PostInvitaionCode(string code, string email)
+        {
+            var family = await _context.Family.Where(f => f.InvitationCode == code).FirstOrDefaultAsync();
+
+            if (family == null)
+            {
+                return Ok(new CommonResponse
+                {
+                    Code = Models.StatusCode.NotFound,
+                    Message = "Invalid Code"
+                });
+            }
+
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user == null)
+            {
+                return Ok(new CommonResponse
+                {
+                    Code = Models.StatusCode.NotFound,
+                    Message = "Not Found User"
+                });
+            }
+
+            var familyMember = new FamilyMember
+            {
+                IsMaster = false,
+                Status = 2,
+                UserId = user.Id,
+                FamilyId = family.FamilyId
+            };
+
+            user.FamilyId = family.FamilyId;
+
+            _context.FamilyMember.Add(familyMember);
+            await _context.SaveChangesAsync();
+
+            return Ok(new CommonResponse
+            {
+                Code = Models.StatusCode.Ok,
+                Message = "Success to Request Invitation"
             });
         }
 
