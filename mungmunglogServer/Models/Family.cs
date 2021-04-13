@@ -14,4 +14,10 @@ namespace mungmunglogServer.Models
         public List<FamilyMember> FamilyMembers { get; set; }
         public List<Pet> Pets { get; set; }
     }
+
+    public class InvitationCodeRequestModel
+    {
+        public string Code { get; set; }
+        public string Email { get; set; }
+    }
 }

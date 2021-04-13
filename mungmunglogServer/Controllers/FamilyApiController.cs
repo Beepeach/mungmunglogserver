@@ -96,24 +96,27 @@ namespace mungmunglogServer.Controllers
         }
 
         [HttpPost("invitation")]
-        public async Task<ActionResult<CommonResponse>> PostInvitaionCode(string code, string email)
+        public async Task<ActionResult<SingleResponse<string>>> PostInvitaionCode(InvitationCodeRequestModel model)
         {
-            var family = await _context.Family.Where(f => f.InvitationCode == code).FirstOrDefaultAsync();
+            var family = await _context.Family
+                .Include(f => f.Pets)
+                .Where(f => f.InvitationCode == model.Code)
+                .FirstOrDefaultAsync();
 
             if (family == null)
             {
-                return Ok(new CommonResponse
+                return Ok(new SingleResponse<string>
                 {
                     Code = Models.StatusCode.NotFound,
                     Message = "Invalid Code"
                 });
             }
 
-            var user = await _userManager.FindByEmailAsync(email);
+            var user = await _userManager.FindByEmailAsync(model.Email);
 
             if (user == null)
             {
-                return Ok(new CommonResponse
+                return Ok(new SingleResponse<string>
                 {
                     Code = Models.StatusCode.NotFound,
                     Message = "Not Found User"
@@ -133,10 +136,13 @@ namespace mungmunglogServer.Controllers
             _context.FamilyMember.Add(familyMember);
             await _context.SaveChangesAsync();
 
-            return Ok(new CommonResponse
+            var petName = family.Pets.FirstOrDefault().Name;
+
+            return Ok(new SingleResponse<string>
             {
                 Code = Models.StatusCode.Ok,
-                Message = "Success to Request Invitation"
+                Message = "Success to Request Invitation",
+                Data = petName
             });
         }
 
