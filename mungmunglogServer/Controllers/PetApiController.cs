@@ -136,11 +136,11 @@ namespace mungmunglogServer.Controllers
 
             if (user == null)
             {
-                return new SingleResponse<PetDto>
+                return Ok(new SingleResponse<PetDto>
                 {
                     Code = Models.StatusCode.NotFound,
                     Message = "유저를 찾을 수 없습니다."
-                };
+                });
             }
 
             var family = new Family();
@@ -177,12 +177,12 @@ namespace mungmunglogServer.Controllers
 
             var dto = new PetDto(newPet);
 
-            return new SingleResponse<PetDto>
+            return Ok( new SingleResponse<PetDto>
             {
                 Code = Models.StatusCode.Ok,
                 Message = "Success Post",
                 Data = dto
-            };
+            });
         }
 
         // DELETE: api/pet/5
