@@ -52,6 +52,43 @@ namespace mungmunglogServer.Controllers
             return family;
         }
 
+        private static Random random = new Random();
+
+        public static string RandomString(int lentgh)
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
+
+            return new string(Enumerable.Repeat(chars, lentgh)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
+        [HttpGet("invitation/{id}")]
+        public async Task<ActionResult<SingleResponse<string>>> GetGenerateInvitationCode(int id)
+        {
+            var family = await _context.Family.FindAsync(id);
+
+            if (family == null)
+            {
+                return Ok(new SingleResponse<string>
+                {
+                    Code = Models.StatusCode.NotFound,
+                    Message = "Not Found The Family"
+                });
+            }
+
+            family.InvitationCode = RandomString(8);
+            family.CodeExpirationDate = DateTime.UtcNow.AddHours(1);
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new SingleResponse<string>
+            {
+                Code = Models.StatusCode.Ok,
+                Message = "Success",
+                Data = family.InvitationCode
+            });
+        }
+
         private bool FamilyExists(int id)
         {
             return _context.Family.Any(e => e.FamilyId == id);

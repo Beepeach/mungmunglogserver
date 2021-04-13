@@ -124,6 +124,7 @@ namespace mungmunglogServer.Controllers
             history.FileUrl4 = model.FileUrl4;
             history.FileUrl5 = model.FileUrl5;
 
+            // 원래는 추적이 안돼서 있는코드.
             _context.Entry(history).State = EntityState.Modified;
 
             try
