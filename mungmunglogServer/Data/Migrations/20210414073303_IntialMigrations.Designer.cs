@@ -10,8 +10,8 @@ using mungmunglogServer.Data;
 namespace mungmunglogServer.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210406143914_UpdataUser")]
-    partial class UpdataUser
+    [Migration("20210414073303_IntialMigrations")]
+    partial class IntialMigrations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -248,6 +248,12 @@ namespace mungmunglogServer.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CodeExpirationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("InvitationCode")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("FamilyId");
 

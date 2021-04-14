@@ -143,7 +143,11 @@ namespace mungmunglogServer.Controllers
                 });
             }
 
-            var family = new Family();
+            var family = new Family()
+            {
+                InvitationCode = "",
+                CodeExpirationDate = DateTime.UtcNow
+            };
 
             _context.Family.Add(family);
             await _context.SaveChangesAsync();

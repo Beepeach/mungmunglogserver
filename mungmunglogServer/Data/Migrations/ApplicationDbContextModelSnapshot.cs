@@ -247,7 +247,7 @@ namespace mungmunglogServer.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime?>("CodeExpirationDate")
+                    b.Property<DateTime>("CodeExpirationDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("InvitationCode")

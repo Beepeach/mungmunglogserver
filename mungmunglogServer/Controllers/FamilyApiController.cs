@@ -96,7 +96,7 @@ namespace mungmunglogServer.Controllers
         }
 
         [HttpPost("invitation")]
-        public async Task<ActionResult<SingleResponse<string>>> PostInvitaionCode(InvitationCodeRequestModel model)
+        public async Task<ActionResult<SingleResponse<FamilyDto>>> PostInvitaionCode(InvitationCodeRequestModel model)
         {
             var family = await _context.Family
                 .Include(f => f.Pets)
@@ -105,7 +105,7 @@ namespace mungmunglogServer.Controllers
 
             if (family == null)
             {
-                return Ok(new SingleResponse<string>
+                return Ok(new SingleResponse<FamilyDto>
                 {
                     Code = Models.StatusCode.NotFound,
                     Message = "Invalid Code"
@@ -116,7 +116,7 @@ namespace mungmunglogServer.Controllers
 
             if (user == null)
             {
-                return Ok(new SingleResponse<string>
+                return Ok(new SingleResponse<FamilyDto>
                 {
                     Code = Models.StatusCode.NotFound,
                     Message = "Not Found User"
@@ -136,13 +136,18 @@ namespace mungmunglogServer.Controllers
             _context.FamilyMember.Add(familyMember);
             await _context.SaveChangesAsync();
 
-            var petName = family.Pets.FirstOrDefault().Name;
+            var familyDto = new FamilyDto(family, _context);
+            familyDto.Pets = await _context.Pet
+                .Include(p => p.Family)
+                .Where(p => p.FamilyId == family.FamilyId)
+                .Select(p => new PetDto(p))
+                .ToListAsync();
 
-            return Ok(new SingleResponse<string>
+            return Ok(new SingleResponse<FamilyDto>
             {
                 Code = Models.StatusCode.Ok,
                 Message = "Success to Request Invitation",
-                Data = petName
+                Data = familyDto
             });
         }
 
