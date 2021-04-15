@@ -59,10 +59,54 @@ namespace mungmunglogServer.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("WalkHistoryId,StartTime,EndTime,Distance,Contents,Deleted,FileUrl1,FileUrl2,FileUrl3,FileUrl4,FileUrl5,PetId,FamilyMemberId")] WalkHistory walkHistory)
+        public async Task<IActionResult> Create(WalkHistory walkHistory)
         {
             if (ModelState.IsValid)
             {
+                if (walkHistory.AttachmentFile1 != null)
+                {
+                    var filePath = await BlobController.UploadImage(walkHistory.AttachmentFile1);
+                    if (filePath != null)
+                    {
+                        walkHistory.FileUrl1 = filePath;
+                    }
+                }
+
+                if (walkHistory.AttachmentFile2 != null)
+                {
+                    var filePath = await BlobController.UploadImage(walkHistory.AttachmentFile2);
+                    if (filePath != null)
+                    {
+                        walkHistory.FileUrl2 = filePath;
+                    }
+                }
+
+                if (walkHistory.AttachmentFile3 != null)
+                {
+                    var filePath = await BlobController.UploadImage(walkHistory.AttachmentFile3);
+                    if (filePath != null)
+                    {
+                        walkHistory.FileUrl3 = filePath;
+                    }
+                }
+
+                if (walkHistory.AttachmentFile4 != null)
+                {
+                    var filePath = await BlobController.UploadImage(walkHistory.AttachmentFile4);
+                    if (filePath != null)
+                    {
+                        walkHistory.FileUrl4 = filePath;
+                    }
+                }
+
+                if (walkHistory.AttachmentFile5 != null)
+                {
+                    var filePath = await BlobController.UploadImage(walkHistory.AttachmentFile5);
+                    if (filePath != null)
+                    {
+                        walkHistory.FileUrl5 = filePath;
+                    }
+                }
                 _context.Add(walkHistory);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -95,7 +139,7 @@ namespace mungmunglogServer.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("WalkHistoryId,StartTime,EndTime,Distance,Contents,Deleted,FileUrl1,FileUrl2,FileUrl3,FileUrl4,FileUrl5,PetId,FamilyMemberId")] WalkHistory walkHistory)
+        public async Task<IActionResult> Edit(int id, WalkHistory walkHistory)
         {
             if (id != walkHistory.WalkHistoryId)
             {
@@ -104,6 +148,75 @@ namespace mungmunglogServer.Controllers
 
             if (ModelState.IsValid)
             {
+                if (walkHistory.AttachmentFile1 != null)
+                {
+                    if (!string.IsNullOrEmpty(walkHistory.FileUrl1))
+                    {
+                        await BlobController.Delete(walkHistory.FileUrl1);
+                    }
+
+                    var filePath = await BlobController.UploadImage(walkHistory.AttachmentFile1);
+                    if (filePath != null)
+                    {
+                        walkHistory.FileUrl1 = filePath;
+                    }
+                }
+
+                if (walkHistory.AttachmentFile2 != null)
+                {
+                    if (!string.IsNullOrEmpty(walkHistory.FileUrl2))
+                    {
+                        await BlobController.Delete(walkHistory.FileUrl2);
+                    }
+
+                    var filePath = await BlobController.UploadImage(walkHistory.AttachmentFile2);
+                    if (filePath != null)
+                    {
+                        walkHistory.FileUrl2 = filePath;
+                    }
+                }
+
+                if (walkHistory.AttachmentFile3 != null)
+                {
+                    if (!string.IsNullOrEmpty(walkHistory.FileUrl3))
+                    {
+                        await BlobController.Delete(walkHistory.FileUrl3);
+                    }
+
+                    var filePath = await BlobController.UploadImage(walkHistory.AttachmentFile3);
+                    if (filePath != null)
+                    {
+                        walkHistory.FileUrl3 = filePath;
+                    }
+                }
+
+                if (walkHistory.AttachmentFile4 != null)
+                {
+                    if (!string.IsNullOrEmpty(walkHistory.FileUrl4))
+                    {
+                        await BlobController.Delete(walkHistory.FileUrl4);
+                    }
+
+                    var filePath = await BlobController.UploadImage(walkHistory.AttachmentFile4);
+                    if (filePath != null)
+                    {
+                        walkHistory.FileUrl4 = filePath;
+                    }
+                }
+
+                if (walkHistory.AttachmentFile5 != null)
+                {
+                    if (!string.IsNullOrEmpty(walkHistory.FileUrl5))
+                    {
+                        await BlobController.Delete(walkHistory.FileUrl5);
+                    }
+
+                    var filePath = await BlobController.UploadImage(walkHistory.AttachmentFile5);
+                    if (filePath != null)
+                    {
+                        walkHistory.FileUrl5 = filePath;
+                    }
+                }
                 try
                 {
                     _context.Update(walkHistory);

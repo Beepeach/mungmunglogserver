@@ -2,9 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Auth;
 using mungmunglogServer.Data;
 using mungmunglogServer.Models;
 
@@ -49,15 +52,22 @@ namespace mungmunglogServer.Controllers
             return View();
         }
 
+
         // POST: Pet/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PetId,Name,Birthday,Breed,Gender,FileUrl")] Pet pet)
+        public async Task<IActionResult> Create(Pet pet)
         {
             if (ModelState.IsValid)
             {
+                var filePath = await BlobController.UploadImage(pet.AttachmentFile);
+                if (filePath != null)
+                {
+                    pet.FileUrl = filePath;
+                }
+
                 _context.Add(pet);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -86,7 +96,7 @@ namespace mungmunglogServer.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PetId,Name,Birthday,Breed,Gender,FileUrl")] Pet pet)
+        public async Task<IActionResult> Edit(int id, Pet pet)
         {
             if (id != pet.PetId)
             {
@@ -95,6 +105,20 @@ namespace mungmunglogServer.Controllers
 
             if (ModelState.IsValid)
             {
+                if (pet.AttachmentFile != null)
+                {
+                    if (!string.IsNullOrEmpty(pet.FileUrl))
+                    {
+                        await BlobController.Delete(pet.FileUrl);
+                    }
+
+                    var filePath = await BlobController.UploadImage(pet.AttachmentFile);
+                    if (filePath != null)
+                    {
+                        pet.FileUrl = filePath;
+                    }
+                }
+
                 try
                 {
                     _context.Update(pet);

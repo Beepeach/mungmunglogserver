@@ -135,7 +135,7 @@ namespace mungmunglogServer.Data.Migrations
                         column: x => x.FamilyId,
                         principalTable: "Family",
                         principalColumn: "FamilyId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(

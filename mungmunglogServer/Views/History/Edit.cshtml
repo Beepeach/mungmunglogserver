@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="HistoryId" />
             <div class="form-group">
@@ -38,25 +38,60 @@
                 <input asp-for="FileUrl1" class="form-control" />
                 <span asp-validation-for="FileUrl1" class="text-danger"></span>
             </div>
+            @if (!string.IsNullOrEmpty(Model.FileUrl1))
+            {<img src="@Model.FileUrl1" style="width:200px;" />}
+            <div class="form-group">
+                <label asp-for="AttachmentFile1" class="control-label"></label>
+                <input asp-for="AttachmentFile1" class="form-control" />
+                <span asp-validation-for="AttachmentFile1" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="FileUrl2" class="control-label"></label>
                 <input asp-for="FileUrl2" class="form-control" />
                 <span asp-validation-for="FileUrl2" class="text-danger"></span>
+            </div>
+            @if (!string.IsNullOrEmpty(Model.FileUrl1))
+            {<img src="@Model.FileUrl1" style="width:200px;" />}
+            <div class="form-group">
+                <label asp-for="AttachmentFile2" class="control-label"></label>
+                <input asp-for="AttachmentFile2" class="form-control" />
+                <span asp-validation-for="AttachmentFile2" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="FileUrl3" class="control-label"></label>
                 <input asp-for="FileUrl3" class="form-control" />
                 <span asp-validation-for="FileUrl3" class="text-danger"></span>
             </div>
+            @if (!string.IsNullOrEmpty(Model.FileUrl1))
+            {<img src="@Model.FileUrl1" style="width:200px;" />}
+            <div class="form-group">
+                <label asp-for="AttachmentFile3" class="control-label"></label>
+                <input asp-for="AttachmentFile3" class="form-control" />
+                <span asp-validation-for="AttachmentFile3" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="FileUrl4" class="control-label"></label>
                 <input asp-for="FileUrl4" class="form-control" />
                 <span asp-validation-for="FileUrl4" class="text-danger"></span>
             </div>
+            @if (!string.IsNullOrEmpty(Model.FileUrl1))
+            {<img src="@Model.FileUrl1" style="width:200px;" />}
+            <div class="form-group">
+                <label asp-for="AttachmentFile4" class="control-label"></label>
+                <input asp-for="AttachmentFile4" class="form-control" />
+                <span asp-validation-for="AttachmentFile4" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="FileUrl5" class="control-label"></label>
                 <input asp-for="FileUrl5" class="form-control" />
                 <span asp-validation-for="FileUrl5" class="text-danger"></span>
+            </div>
+            @if (!string.IsNullOrEmpty(Model.FileUrl1))
+            {<img src="@Model.FileUrl1" style="width:200px;" />}
+            <div class="form-group">
+                <label asp-for="AttachmentFile5" class="control-label"></label>
+                <input asp-for="AttachmentFile5" class="form-control" />
+                <span asp-validation-for="AttachmentFile5" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="PetId" class="control-label"></label>

@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="PetId" />
             <div class="form-group">
@@ -37,6 +37,19 @@
                 <label asp-for="FileUrl" class="control-label"></label>
                 <input asp-for="FileUrl" class="form-control" />
                 <span asp-validation-for="FileUrl" class="text-danger"></span>
+                @if (!string.IsNullOrEmpty(Model.FileUrl))
+                {
+        <img src="@Model.FileUrl" style="width:200px;" />}
+            </div>
+            <div class="form-group">
+                <label asp-for="AttachmentFile" class="control-label"></label>
+                <input asp-for="AttachmentFile" class="form-control" />
+                <span asp-validation-for="AttachmentFile" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FamilyId" class="control-label"></label>
+                <input asp-for="FamilyId" class="form-control" />
+                <span asp-validation-for="FamilyId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
