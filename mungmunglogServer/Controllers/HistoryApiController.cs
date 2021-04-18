@@ -23,13 +23,15 @@ namespace mungmunglogServer.Controllers
             _context = context;
         }
 
-        // GET: api/history/list/pet/{petId}
-        [HttpGet("list/pet/{petId}")]
-        public async Task<ActionResult<ListResponse<HistoryDto>>> GetPetHistories(int petId)
+        // GET: api/history/list/{historyType}/pet/{petId}
+        [HttpGet("list/{historyType}/pet/{petId}")]
+        public async Task<ActionResult<ListResponse<HistoryDto>>> GetPetHistories(int historyType, int petId)
         {
             var histories = await _context.History
                 .Where(h => h.PetId == petId)
+                .Where(h => h.Type == historyType)
                 .Select(h => new HistoryDto(h))
+                .OrderByDescending(h => h.Date)
                 .ToListAsync();
 
             if (histories == null)
