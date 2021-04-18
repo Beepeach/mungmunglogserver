@@ -50,7 +50,7 @@ namespace mungmunglogServer.Controllers
         public IActionResult Create()
         {
             ViewData["FamilyMemberId"] = new SelectList(_context.FamilyMember, "FamilyMemberId", "FamilyMemberId");
-            ViewData["PetId"] = new SelectList(_context.Pet, "PetId", "Breed");
+            ViewData["PetId"] = new SelectList(_context.Pet, "PetId", "PetId");
             return View();
         }
 
