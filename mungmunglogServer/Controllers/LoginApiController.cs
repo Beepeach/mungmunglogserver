@@ -54,7 +54,9 @@ namespace mungmunglogServer.Controllers
                         Message = "Login Succeed",
                         Email = model.Email,
                         UserId = existingUser.Id,
-                        Token = token
+                        Token = token,
+                        Nickname = existingUser.Nickname,
+                        FamilyId = existingUser.FamilyId
                     });
                 }
                 else
