@@ -69,6 +69,8 @@ namespace mungmunglogServer.Models
             FileUrl3 = history.FileUrl3;
             FileUrl4 = history.FileUrl4;
             FileUrl5 = history.FileUrl5;
+            PetId = history.PetId;
+            FamilyMemberId = history.FamilyMemberId;
         }
 
         public int HistoryId { get; set; }

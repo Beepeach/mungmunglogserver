@@ -32,7 +32,10 @@ namespace mungmunglogServer.Controllers
         [HttpGet("list/{familyId}")]
         public async Task<ActionResult<ListResponse<PetDto>>> GetPetList(int familyId)
         {
+
             var pets = await _context.Pet
+                .Include(p => p.Histories)
+                .Include(p => p.WalkHistories)
                 .Where(p => p.FamilyId == familyId)
                 .Select(p => new PetDto(p))
                 .ToListAsync();

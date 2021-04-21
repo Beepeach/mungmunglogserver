@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using mungmunglogServer.Data;
 
 namespace mungmunglogServer.Models
 {
@@ -53,6 +56,19 @@ namespace mungmunglogServer.Models
             Gender = pet.Gender;
             FileUrl = pet.FileUrl;
             FamilyId = pet.FamilyId;
+
+            var historyDtoList = pet.Histories
+                .OrderByDescending(h => h.Date)
+                .Select(h => new HistoryDto(h))
+                .ToList();
+
+            var walkHistoryDtoList = pet.WalkHistories
+                .OrderByDescending(h => h.EndTime)
+                .Select(h => new WalkHistoryDto(h))
+                .ToList();
+
+            Histories = historyDtoList;
+            WalkHistories = walkHistoryDtoList;
         }
 
         public int PetId { get; set; }
@@ -63,6 +79,9 @@ namespace mungmunglogServer.Models
         public string FileUrl { get; set; }
 
         public int FamilyId { get; set; }
+
+        public List<HistoryDto> Histories { get; set; }
+        public List<WalkHistoryDto> WalkHistories { get; set; }
     }
 
     public class PetPutModel
