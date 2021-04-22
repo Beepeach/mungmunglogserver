@@ -1,9 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using Microsoft.AspNetCore.Http;
-using mungmunglogServer.Data;
 
 namespace mungmunglogServer.Models
 {
@@ -53,31 +51,6 @@ namespace mungmunglogServer.Models
 
     public class HistoryDto
     {
-
-        public HistoryDto(History history, ApplicationDbContext _context)
-        {
-            DateTime baseTime = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            DateTime date = history.Date;
-
-            long dateTick = date.Ticks - baseTime.Ticks;
-            TimeSpan dateTimeSpan = new TimeSpan(dateTick);
-
-            User user = _context.Users.Find(history.FamilyMember.UserId);
-
-            HistoryId = history.HistoryId;
-            Type = history.Type;
-            Date = dateTimeSpan.TotalSeconds;
-            Contents = history.Contents;
-            Deleted = history.Deleted;
-            FileUrl1 = history.FileUrl1;
-            FileUrl2 = history.FileUrl2;
-            FileUrl3 = history.FileUrl3;
-            FileUrl4 = history.FileUrl4;
-            FileUrl5 = history.FileUrl5;
-            PetId = history.PetId;
-            FamilyMemberId = history.FamilyMemberId;
-            Nickname = user.Nickname;
-        }
         public HistoryDto(History history)
         {
             DateTime baseTime = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc);
@@ -113,7 +86,6 @@ namespace mungmunglogServer.Models
 
         public int PetId { get; set; }
         public int FamilyMemberId { get; set; }
-        public string Nickname { get; set; }
     }
 }
 
