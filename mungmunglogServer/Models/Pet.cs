@@ -40,6 +40,37 @@ namespace mungmunglogServer.Models
 
     public class PetDto
     {
+        public PetDto(Pet pet, ApplicationDbContext _context)
+        {
+            DateTime baseDate = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            DateTime birthday = pet.Birthday;
+
+            long birthdayTicks = birthday.Ticks - baseDate.Ticks;
+
+            TimeSpan birthdaySpan = new TimeSpan(birthdayTicks);
+
+            PetId = pet.PetId;
+            Name = pet.Name;
+            Birthday = birthdaySpan.TotalSeconds;
+            Breed = pet.Breed;
+            Gender = pet.Gender;
+            FileUrl = pet.FileUrl;
+            FamilyId = pet.FamilyId;
+
+            var historyDtoList = pet.Histories
+                .OrderByDescending(h => h.Date)
+                .Select(h => new HistoryDto(h, _context))
+                .ToList();
+
+            var walkHistoryDtoList = pet.WalkHistories
+                .OrderByDescending(h => h.EndTime)
+                .Select(h => new WalkHistoryDto(h))
+                .ToList();
+
+            Histories = historyDtoList;
+            WalkHistories = walkHistoryDtoList;
+        }
+
         public PetDto(Pet pet)
         {
             DateTime baseDate = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc);
