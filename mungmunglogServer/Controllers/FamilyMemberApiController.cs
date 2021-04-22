@@ -29,7 +29,7 @@ namespace mungmunglogServer.Controllers
         }
 
         // GET: api/familyMember/list/{familyId}
-        [HttpGet("{familyId}")]
+        [HttpGet("list/{familyId}")]
         public async Task<ActionResult<ListResponse<FamilyMemberDto>>> GetFamilyMembers(int familyId)
         {
             var familyMembers = await _context.FamilyMember

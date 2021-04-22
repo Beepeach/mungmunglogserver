@@ -14,9 +14,9 @@ using mungmunglogServer.Models;
 
 namespace mungmunglogServer.Controllers
 {
-    [Route("api/users")]
+    [Route("api/user")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class UserApiController : CommonApiController
     {
         public UserApiController(
@@ -30,7 +30,8 @@ namespace mungmunglogServer.Controllers
 
         }
 
-        [HttpGet]
+        // api/user/list
+        [HttpGet("list")]
         public async Task<ActionResult<ListResponse<User>>> GetUsers()
         {
             var users = await _context.Users
@@ -45,6 +46,40 @@ namespace mungmunglogServer.Controllers
                 List = users
 
             });
+        }
+
+        // Post: api/user/familyMemberId
+        [HttpGet("{familyMemberId}")]
+        public async Task<ActionResult<SingleResponse<User>>> GetUserFromFamilyMember(int familyMemberId)
+        {
+            var familyMember = _context.FamilyMember.Where(m => m.FamilyMemberId == familyMemberId).FirstOrDefault();
+
+            if (familyMember == null)
+            {
+                return NotFound(new SingleResponse<FamilyMemberDto>
+                {
+                    Code = Models.StatusCode.NotFound,
+                    Message = "Not Found The Memeber"
+                });
+            }
+
+            var user = await _context.Users.Where(u => u.Id == familyMember.UserId).FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                return NotFound(new SingleResponse<User>
+                {
+                    Code = Models.StatusCode.NotFound,
+                    Message = "Not Found The User"
+                });
+            }
+
+            return Ok(new SingleResponse<User>
+            {
+                Code = Models.StatusCode.Ok,
+                Message = "Find The User",
+                Data = user
+            }); 
         }
     }
 }
