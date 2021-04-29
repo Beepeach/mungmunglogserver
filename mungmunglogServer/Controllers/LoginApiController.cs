@@ -53,10 +53,8 @@ namespace mungmunglogServer.Controllers
                         Code = Models.StatusCode.Ok,
                         Message = "Login Succeed",
                         Email = model.Email,
-                        UserId = existingUser.Id,
                         Token = token,
-                        Nickname = existingUser.Nickname,
-                        FamilyId = existingUser.FamilyId
+                        User = existingUser
                     });
                 }
                 else
@@ -96,8 +94,8 @@ namespace mungmunglogServer.Controllers
                             Code = Models.StatusCode.Ok,
                             Message = "SNS 로그인 성공",
                             Email = model.Email,
-                            UserId = user.Id,
-                            Token = token
+                            Token = token,
+                            User = user
                         });
 
                     }
@@ -156,8 +154,9 @@ namespace mungmunglogServer.Controllers
                                     Code = Models.StatusCode.Ok,
                                     Message = "SNS 로그인 성공",
                                     Email = newUser.Email,
-                                    UserId = newUser.Id,
-                                    Token = token
+                                    Token = token,
+                                    User = newUser
+                                    
                                 });
                             }
                             else
@@ -234,8 +233,8 @@ namespace mungmunglogServer.Controllers
                                 Code = Models.StatusCode.Ok,
                                 Message = "SNS 로그인 성공",
                                 Email = newUser.Email,
-                                UserId = newUser.Id,
-                                Token = token
+                                Token = token,
+                                User = newUser
                             });
                         }
                         else

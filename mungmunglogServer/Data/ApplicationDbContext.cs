@@ -80,4 +80,19 @@ namespace mungmunglogServer.Data
         public int? FamilyId { get; set; }
         public Family Family { get; set; }
     }
+
+
+
+    // UserDto가 필요할까??
+
+    //public class UserDto
+    //{
+    //    public string UserId { get; set; }
+    //    public string Nickname { get; set; }
+    //    public string relatioship { get; set; }
+    //    public bool gender { get; set; }
+    //    public string fileUrl { get; set; }
+    //    public int? FamilyId { get; set; }
+    //    public Family Family { get; set; }
+    //}
 }
