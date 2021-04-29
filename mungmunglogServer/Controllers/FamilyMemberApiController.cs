@@ -27,13 +27,14 @@ namespace mungmunglogServer.Controllers
         {
 
         }
-
-        // GET: api/familyMember/list/{familyId}
-        [HttpGet("list/{familyId}")]
-        public async Task<ActionResult<ListResponse<FamilyMemberDto>>> GetFamilyMembers(int familyId)
+        // GET: api/familyMember/{familyMemberId}
+        [HttpGet("{familyMemberId}")]
+        public async Task<ActionResult<ListResponse<FamilyMemberDto>>> GetFamilyMember(int familyMemberId)
         {
             var familyMembers = await _context.FamilyMember
-                .Where(m => m.FamilyId == familyId)
+                .Where(m => m.FamilyMemberId == familyMemberId)
+                .Include(m => m.Histories)
+                .Include(m => m.WalkHistories)
                 .Select(m => new FamilyMemberDto(m))
                 .ToListAsync();
 
@@ -41,6 +42,26 @@ namespace mungmunglogServer.Controllers
             {
                 Code = Models.StatusCode.Ok,
                 Message = "Success Get FamilyMemeber",
+                List = familyMembers
+            };
+        }
+
+
+        // GET: api/familyMember/list/{familyId}
+        [HttpGet("list/{familyId}")]
+        public async Task<ActionResult<ListResponse<FamilyMemberDto>>> GetFamilyMembers(int familyId)
+        {
+            var familyMembers = await _context.FamilyMember
+                .Where(m => m.FamilyId == familyId)
+                .Include(m => m.Histories)
+                .Include(m => m.WalkHistories)
+                .Select(m => new FamilyMemberDto(m))
+                .ToListAsync();
+
+            return new ListResponse<FamilyMemberDto>
+            {
+                Code = Models.StatusCode.Ok,
+                Message = "Success Get FamilyMemeber List",
                 List = familyMembers
             };
         }

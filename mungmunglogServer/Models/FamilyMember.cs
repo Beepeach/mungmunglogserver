@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace mungmunglogServer.Models
 {
@@ -30,6 +31,19 @@ namespace mungmunglogServer.Models
             Status = familyMember.Status;
             UserId = familyMember.UserId;
             FamilyId = familyMember.FamilyId;
+
+            var historyDtoList = familyMember.Histories
+                .OrderByDescending(h => h.Date)
+                .Select(h => new HistoryDto(h))
+                .ToList();
+
+            var walkHistoryDtoList = familyMember.WalkHistories
+                .OrderByDescending(h => h.EndTime)
+                .Select(h => new WalkHistoryDto(h))
+                .ToList();
+
+            Histories = historyDtoList;
+            WalkHistories = walkHistoryDtoList;
         }
 
         public bool IsMaster { get; set; }
@@ -37,8 +51,8 @@ namespace mungmunglogServer.Models
         public string UserId { get; set; }
         public int? FamilyId { get; set; }
 
-        //public List<HistoryDto> Histories { get; set; }
-        //public List<WalkHistoryDto> WalkHistories { get; set; }
+        public List<HistoryDto> Histories { get; set; }
+        public List<WalkHistoryDto> WalkHistories { get; set; }
     }
 
     public class FamilyMemberPutModel

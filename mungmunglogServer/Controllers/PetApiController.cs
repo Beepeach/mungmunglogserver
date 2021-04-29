@@ -34,9 +34,9 @@ namespace mungmunglogServer.Controllers
         {
 
             var pets = await _context.Pet
+                .Where(p => p.FamilyId == familyId)
                 .Include(p => p.Histories)
                 .Include(p => p.WalkHistories)
-                .Where(p => p.FamilyId == familyId)
                 .Select(p => new PetDto(p))
                 .ToListAsync();
 
