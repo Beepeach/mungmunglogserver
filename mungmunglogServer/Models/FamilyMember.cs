@@ -27,6 +27,7 @@ namespace mungmunglogServer.Models
     {
         public FamilyMemberDto(FamilyMember familyMember)
         {
+            FamilyMemberId = familyMember.FamilyMemberId;
             IsMaster = familyMember.IsMaster;
             Status = familyMember.Status;
             UserId = familyMember.UserId;
@@ -46,6 +47,7 @@ namespace mungmunglogServer.Models
             WalkHistories = walkHistoryDtoList;
         }
 
+        public int FamilyMemberId { get; set; }
         public bool IsMaster { get; set; }
         public int Status { get; set; }
         public string UserId { get; set; }

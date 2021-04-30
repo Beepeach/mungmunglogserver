@@ -25,6 +25,7 @@ namespace mungmunglogServer.Models
             long codeExpirationDateTicks = codeExpirationDate.Ticks - baseTime.Ticks;
             TimeSpan codeExpirationDateTimeSpan = new TimeSpan(codeExpirationDateTicks);
 
+            FamilyId = family.FamilyId;
             InvitationCode = family.InvitationCode;
             CodeExpirationDate = codeExpirationDateTimeSpan.TotalSeconds;
         }
@@ -36,10 +37,12 @@ namespace mungmunglogServer.Models
             long codeExpirationDateTicks = codeExpirationDate.Ticks - baseTime.Ticks;
             TimeSpan codeExpirationDateTimeSpan = new TimeSpan(codeExpirationDateTicks);
 
+            FamilyId = family.FamilyId;
             InvitationCode = family.InvitationCode;
             CodeExpirationDate = codeExpirationDateTimeSpan.TotalSeconds;
         }
 
+        public int FamilyId { get; set; }
         public string InvitationCode { get; set; }
         public double CodeExpirationDate { get; set; }
         public List<FamilyMemberDto> FamilyMembers { get; set; }
