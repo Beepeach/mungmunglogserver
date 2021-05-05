@@ -57,15 +57,42 @@ namespace mungmunglogServer.Models
             FileUrl = pet.FileUrl;
             FamilyId = pet.FamilyId;
 
-            var historyDtoList = pet.Histories
-                .OrderByDescending(h => h.Date)
-                .Select(h => new HistoryDto(h))
-                .ToList();
+            List<HistoryDto> historyDtoList = new List<HistoryDto>();
+            List<WalkHistoryDto> walkHistoryDtoList = new List<WalkHistoryDto>();
 
-            var walkHistoryDtoList = pet.WalkHistories
-                .OrderByDescending(h => h.EndTime)
-                .Select(h => new WalkHistoryDto(h))
-                .ToList();
+            if (pet.Histories != null && pet.WalkHistories != null)
+            {
+
+                historyDtoList = pet.Histories
+                    .OrderByDescending(h => h.Date)
+                    .Select(h => new HistoryDto(h))
+                    .ToList();
+
+                walkHistoryDtoList = pet.WalkHistories
+                    .OrderByDescending(h => h.EndTime)
+                    .Select(h => new WalkHistoryDto(h))
+                    .ToList();
+
+            }
+            else if (pet.Histories == null)
+            {
+                historyDtoList = null;
+                walkHistoryDtoList = pet.WalkHistories
+                    .OrderByDescending(h => h.EndTime)
+                    .Select(h => new WalkHistoryDto(h))
+                    .ToList();
+            } else if (pet.WalkHistories == null)
+            {
+                historyDtoList = pet.Histories
+                    .OrderByDescending(h => h.Date)
+                    .Select(h => new HistoryDto(h))
+                    .ToList();
+                walkHistoryDtoList = null;
+            } else
+            {
+                historyDtoList = null;
+                walkHistoryDtoList = null;
+            }
 
             Histories = historyDtoList;
             WalkHistories = walkHistoryDtoList;
