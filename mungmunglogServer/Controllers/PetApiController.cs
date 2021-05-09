@@ -163,9 +163,6 @@ namespace mungmunglogServer.Controllers
                 FamilyId = family.FamilyId
             };
 
-            // 현재는 1계정에 1가지의 Family만 허용이 된다.
-            user.FamilyId = family.FamilyId;
-
             _context.FamilyMember.Add(familyMember);
             await _context.SaveChangesAsync();
 
@@ -180,9 +177,11 @@ namespace mungmunglogServer.Controllers
             };
 
             _context.Pet.Add(newPet);
-            await _context.SaveChangesAsync();
+            //await _context.SaveChangesAsync();
 
             var dto = new PetDto(newPet);
+
+            await _context.SaveChangesAsync();
 
             return Ok( new SingleResponse<PetDto>
             {

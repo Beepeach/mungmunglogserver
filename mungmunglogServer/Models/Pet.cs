@@ -60,7 +60,13 @@ namespace mungmunglogServer.Models
             List<HistoryDto> historyDtoList = new List<HistoryDto>();
             List<WalkHistoryDto> walkHistoryDtoList = new List<WalkHistoryDto>();
 
-            if (pet.Histories != null && pet.WalkHistories != null)
+
+            if (pet.Histories == null && pet.WalkHistories == null)
+            {
+                historyDtoList = null;
+                walkHistoryDtoList = null;
+            }
+            else if (pet.Histories != null && pet.WalkHistories != null)
             {
 
                 historyDtoList = pet.Histories
@@ -81,21 +87,15 @@ namespace mungmunglogServer.Models
                     .OrderByDescending(h => h.EndTime)
                     .Select(h => new WalkHistoryDto(h))
                     .ToList();
-            } else if (pet.WalkHistories == null)
+            }
+            else if (pet.WalkHistories == null)
             {
                 historyDtoList = pet.Histories
                     .OrderByDescending(h => h.Date)
                     .Select(h => new HistoryDto(h))
                     .ToList();
                 walkHistoryDtoList = null;
-            } else
-            {
-                historyDtoList = null;
-                walkHistoryDtoList = null;
             }
-
-            Histories = historyDtoList;
-            WalkHistories = walkHistoryDtoList;
         }
 
         public int PetId { get; set; }

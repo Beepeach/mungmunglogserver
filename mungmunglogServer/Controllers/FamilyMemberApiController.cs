@@ -150,8 +150,6 @@ namespace mungmunglogServer.Controllers
                 };
             }
 
-            user.FamilyId = family.FamilyId;
-
             var familyMember = new FamilyMember
             {
                 IsMaster = false,

@@ -12,12 +12,41 @@
 <table class="table">
     <thead>
         <tr>
-            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.FamilyId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InvitationCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CodeExpirationDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FamilyMembers)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Pets)
+            </th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FamilyId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InvitationCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CodeExpirationDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FamilyMembers)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Pets)
+            </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.FamilyId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.FamilyId">Details</a> |

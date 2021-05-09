@@ -131,8 +131,6 @@ namespace mungmunglogServer.Controllers
                 FamilyId = family.FamilyId
             };
 
-            user.FamilyId = family.FamilyId;
-
             _context.FamilyMember.Add(familyMember);
             await _context.SaveChangesAsync();
 

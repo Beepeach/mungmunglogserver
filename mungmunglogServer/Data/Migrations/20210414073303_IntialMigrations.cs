@@ -89,7 +89,7 @@ namespace mungmunglogServer.Data.Migrations
                         column: x => x.FamilyId,
                         principalTable: "Family",
                         principalColumn: "FamilyId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -111,7 +111,7 @@ namespace mungmunglogServer.Data.Migrations
                         column: x => x.FamilyId,
                         principalTable: "Family",
                         principalColumn: "FamilyId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -249,13 +249,13 @@ namespace mungmunglogServer.Data.Migrations
                         column: x => x.FamilyMemberId,
                         principalTable: "FamilyMember",
                         principalColumn: "FamilyMemberId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_History_Pet_PetId",
                         column: x => x.PetId,
                         principalTable: "Pet",
                         principalColumn: "PetId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -285,13 +285,13 @@ namespace mungmunglogServer.Data.Migrations
                         column: x => x.FamilyMemberId,
                         principalTable: "FamilyMember",
                         principalColumn: "FamilyMemberId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_WalkHistory_Pet_PetId",
                         column: x => x.PetId,
                         principalTable: "Pet",
                         principalColumn: "PetId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
