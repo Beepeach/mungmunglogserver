@@ -102,6 +102,7 @@ namespace mungmunglogServer.Controllers
                 {
                     Code = Models.StatusCode.Ok,
                     Message = "정보 등록 성공",
+                    Email = user.Email,
                     User = user
                 });
             } else
