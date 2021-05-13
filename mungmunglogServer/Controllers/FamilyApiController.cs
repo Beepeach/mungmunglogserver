@@ -17,7 +17,7 @@ namespace mungmunglogServer.Controllers
     [ApiController]
     public class FamilyApiController : CommonApiController
     {
-    
+
         public FamilyApiController(UserManager<User> userManager,
             SignInManager<User> signInManager,
             ApplicationDbContext context,
@@ -46,61 +46,12 @@ namespace mungmunglogServer.Controllers
 
         // GET: api/family/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Family>> GetFamily(int id)
-        {
-            var family = await _context.Family.FindAsync(id);
-
-            if (family == null)
-            {
-                return NotFound();
-            }
-
-            return family;
-        }
-
-        private static Random random = new Random();
-
-        public static string RandomString(int lentgh)
-        {
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
-
-            return new string(Enumerable.Repeat(chars, lentgh)
-                .Select(s => s[random.Next(s.Length)]).ToArray());
-        }
-
-        [HttpGet("invitation/{id}")]
-        public async Task<ActionResult<SingleResponse<string>>> GetGenerateInvitationCode(int id)
-        {
-            var family = await _context.Family.FindAsync(id);
-
-            if (family == null)
-            {
-                return Ok(new SingleResponse<string>
-                {
-                    Code = Models.StatusCode.NotFound,
-                    Message = "Not Found The Family"
-                });
-            }
-
-            family.InvitationCode = RandomString(8);
-            family.CodeExpirationDate = DateTime.UtcNow.AddHours(1);
-
-            await _context.SaveChangesAsync();
-
-            return Ok(new SingleResponse<string>
-            {
-                Code = Models.StatusCode.Ok,
-                Message = "Success",
-                Data = family.InvitationCode
-            });
-        }
-
-        [HttpPost("invitation")]
-        public async Task<ActionResult<SingleResponse<FamilyDto>>> PostInvitaionCode(InvitationCodeRequestModel model)
+        public async Task<ActionResult<SingleResponse<FamilyDto>>> GetFamily(int id)
         {
             var family = await _context.Family
+                .Include(f => f.FamilyMembers)
                 .Include(f => f.Pets)
-                .Where(f => f.InvitationCode == model.Code)
+                .Where(f => f.FamilyId == id)
                 .FirstOrDefaultAsync();
 
             if (family == null)
@@ -108,50 +59,114 @@ namespace mungmunglogServer.Controllers
                 return Ok(new SingleResponse<FamilyDto>
                 {
                     Code = Models.StatusCode.NotFound,
-                    Message = "Invalid Code"
+                    Message = "Not Found The Family"
                 });
             }
-
-            var user = await _userManager.FindByEmailAsync(model.Email);
-
-            if (user == null)
-            {
-                return Ok(new SingleResponse<FamilyDto>
-                {
-                    Code = Models.StatusCode.NotFound,
-                    Message = "Not Found User"
-                });
-            }
-
-            var familyMember = new FamilyMember
-            {
-                IsMaster = false,
-                Status = 2,
-                UserId = user.Id,
-                FamilyId = family.FamilyId
-            };
-
-            _context.FamilyMember.Add(familyMember);
-            await _context.SaveChangesAsync();
-
-            var familyDto = new FamilyDto(family, _context);
-            familyDto.Pets = await _context.Pet
-                .Include(p => p.Family)
-                .Where(p => p.FamilyId == family.FamilyId)
-                .Select(p => new PetDto(p))
-                .ToListAsync();
 
             return Ok(new SingleResponse<FamilyDto>
             {
                 Code = Models.StatusCode.Ok,
-                Message = "Success to Request Invitation",
-                Data = familyDto
+                Message = "Success Found Family",
+                Data = new FamilyDto(family)
             });
         }
 
-        private bool FamilyExists(int id)
-        {
-            return _context.Family.Any(e => e.FamilyId == id);
-        }
+    
+
+    private static Random random = new Random();
+
+    public static string RandomString(int lentgh)
+    {
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
+
+        return new string(Enumerable.Repeat(chars, lentgh)
+            .Select(s => s[random.Next(s.Length)]).ToArray());
     }
+
+    [HttpGet("invitation/{id}")]
+    public async Task<ActionResult<SingleResponse<string>>> GetGenerateInvitationCode(int id)
+    {
+        var family = await _context.Family.FindAsync(id);
+
+        if (family == null)
+        {
+            return Ok(new SingleResponse<string>
+            {
+                Code = Models.StatusCode.NotFound,
+                Message = "Not Found The Family"
+            });
+        }
+
+        family.InvitationCode = RandomString(8);
+        family.CodeExpirationDate = DateTime.UtcNow.AddHours(1);
+
+        await _context.SaveChangesAsync();
+
+        return Ok(new SingleResponse<string>
+        {
+            Code = Models.StatusCode.Ok,
+            Message = "Success",
+            Data = family.InvitationCode
+        });
+    }
+
+    [HttpPost("invitation")]
+    public async Task<ActionResult<SingleResponse<FamilyDto>>> PostInvitaionCode(InvitationCodeRequestModel model)
+    {
+        var family = await _context.Family
+            .Include(f => f.Pets)
+            .Where(f => f.InvitationCode == model.Code)
+            .FirstOrDefaultAsync();
+
+        if (family == null)
+        {
+            return Ok(new SingleResponse<FamilyDto>
+            {
+                Code = Models.StatusCode.NotFound,
+                Message = "Invalid Code"
+            });
+        }
+
+        var user = await _userManager.FindByEmailAsync(model.Email);
+
+        if (user == null)
+        {
+            return Ok(new SingleResponse<FamilyDto>
+            {
+                Code = Models.StatusCode.NotFound,
+                Message = "Not Found User"
+            });
+        }
+
+        var familyMember = new FamilyMember
+        {
+            IsMaster = false,
+            Status = 2,
+            UserId = user.Id,
+            FamilyId = family.FamilyId
+        };
+
+        _context.FamilyMember.Add(familyMember);
+        await _context.SaveChangesAsync();
+
+        var familyDto = new FamilyDto(family, _context);
+        familyDto.Pets = await _context.Pet
+            .Include(p => p.Family)
+            .Where(p => p.FamilyId == family.FamilyId)
+            .Select(p => new PetDto(p))
+            .ToListAsync();
+
+        return Ok(new SingleResponse<FamilyDto>
+        {
+            Code = Models.StatusCode.Ok,
+            Message = "Success to Request Invitation",
+            Data = familyDto
+        });
+    }
+
+    private bool FamilyExists(int id)
+    {
+        return _context.Family.Any(e => e.FamilyId == id);
+    }
+}
 }

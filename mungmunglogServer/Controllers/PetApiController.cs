@@ -163,10 +163,9 @@ namespace mungmunglogServer.Controllers
                 FamilyId = family.FamilyId
             };
 
-            family.FamilyMembers.Add(newFamilyMember);
             _context.FamilyMember.Add(newFamilyMember);
             await _context.SaveChangesAsync();
-
+            
             var newPet = new Pet
             {
                 Name = model.Name,
@@ -183,8 +182,6 @@ namespace mungmunglogServer.Controllers
 
             var dto = new PetDto(newPet);
 
-            family.FamilyMembers.Add(newFamilyMember);
-            family.Pets.Add(newPet);
             await _context.SaveChangesAsync();
 
             return Ok( new SingleResponse<PetDto>

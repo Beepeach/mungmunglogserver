@@ -30,9 +30,27 @@ namespace mungmunglogServer.Models
             InvitationCode = family.InvitationCode;
             CodeExpirationDate = codeExpirationDateTimeSpan.TotalSeconds;
 
-            // member나 pet이 안들어있다면 오류
-            FamilyMembers = family.FamilyMembers.Select(m => new FamilyMemberDto(m)).ToList();
-            Pets = family.Pets.Select(p => new PetDto(p)).ToList();
+            if (family.FamilyMembers == null && family.Pets == null)
+            {
+                FamilyMembers = null;
+                Pets = null;
+            }
+            else if (family.FamilyMembers != null && family.Pets != null)
+            {
+                FamilyMembers = family.FamilyMembers.Select(m => new FamilyMemberDto(m)).ToList();
+                Pets = family.Pets.Select(p => new PetDto(p)).ToList();
+            }
+            else if (family.FamilyMembers == null)
+            {
+                FamilyMembers = null;
+                Pets = family.Pets.Select(p => new PetDto(p)).ToList();
+            }
+            else if (family.Pets == null)
+            {
+                FamilyMembers = family.FamilyMembers.Select(m => new FamilyMemberDto(m)).ToList();
+                Pets = null;
+            }
+           
         }
 
         public FamilyDto(Family family)
@@ -46,9 +64,26 @@ namespace mungmunglogServer.Models
             InvitationCode = family.InvitationCode;
             CodeExpirationDate = codeExpirationDateTimeSpan.TotalSeconds;
 
-            // member나 pet이 안들어있다면 오류
-            FamilyMembers = family.FamilyMembers.Select(m => new FamilyMemberDto(m)).ToList();
-            Pets = family.Pets.Select(p => new PetDto(p)).ToList();
+            if (family.FamilyMembers == null && family.Pets == null)
+            {
+                FamilyMembers = null;
+                Pets = null;
+            }
+            else if (family.FamilyMembers != null && family.Pets != null)
+            {
+                FamilyMembers = family.FamilyMembers.Select(m => new FamilyMemberDto(m)).ToList();
+                Pets = family.Pets.Select(p => new PetDto(p)).ToList();
+            }
+            else if (family.FamilyMembers == null)
+            {
+                FamilyMembers = null;
+                Pets = family.Pets.Select(p => new PetDto(p)).ToList();
+            }
+            else if (family.Pets == null)
+            {
+                FamilyMembers = family.FamilyMembers.Select(m => new FamilyMemberDto(m)).ToList();
+                Pets = null;
+            }
         }
 
         public int FamilyId { get; set; }

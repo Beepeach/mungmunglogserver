@@ -33,18 +33,41 @@ namespace mungmunglogServer.Models
             UserId = familyMember.UserId;
             FamilyId = familyMember.FamilyId;
 
-            var historyDtoList = familyMember.Histories
+            if (familyMember.Histories == null && familyMember.WalkHistories == null)
+            {
+                Histories = null;
+                WalkHistories = null;
+            }
+            else if (familyMember.Histories != null && familyMember.WalkHistories != null)
+            {
+                Histories = familyMember.Histories
                 .OrderByDescending(h => h.Date)
                 .Select(h => new HistoryDto(h))
                 .ToList();
 
-            var walkHistoryDtoList = familyMember.WalkHistories
+                WalkHistories = familyMember.WalkHistories
                 .OrderByDescending(h => h.EndTime)
                 .Select(h => new WalkHistoryDto(h))
                 .ToList();
+            }
+            else if (familyMember.Histories == null)
+            {
+                Histories = null;
 
-            Histories = historyDtoList;
-            WalkHistories = walkHistoryDtoList;
+                WalkHistories = familyMember.WalkHistories
+               .OrderByDescending(h => h.EndTime)
+               .Select(h => new WalkHistoryDto(h))
+               .ToList();
+            }
+            else if (familyMember.WalkHistories == null)
+            {
+                Histories = Histories = familyMember.Histories
+                .OrderByDescending(h => h.Date)
+                .Select(h => new HistoryDto(h))
+                .ToList();
+
+                WalkHistories = null;
+            }
         }
 
         public int FamilyMemberId { get; set; }
