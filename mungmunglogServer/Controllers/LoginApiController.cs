@@ -45,6 +45,11 @@ namespace mungmunglogServer.Controllers
 
             if (result.Succeeded)
             {
+                var familyMember = _context.FamilyMember
+                    .Where(m => m.UserId == existingUser.Id)
+                    .Select(m => new FamilyMemberDto(m))
+                    .FirstOrDefault();
+
                 var token = GetApiToken(existingUser);
                 if (!token.Contains("fail"))
                 {
@@ -54,7 +59,8 @@ namespace mungmunglogServer.Controllers
                         Message = "Login Succeed",
                         Email = model.Email,
                         Token = token,
-                        User = existingUser
+                        User = existingUser,
+                        FamilyMember = familyMember
                     });
                 }
                 else
@@ -86,6 +92,11 @@ namespace mungmunglogServer.Controllers
 
                 if (user != null)
                 {
+                    var familyMember = _context.FamilyMember
+                   .Where(m => m.UserId == user.Id)
+                   .Select(m => new FamilyMemberDto(m))
+                   .FirstOrDefault();
+
                     var token = GetApiToken(user);
                     if (!token.Contains("fail"))
                     {
@@ -95,7 +106,8 @@ namespace mungmunglogServer.Controllers
                             Message = "SNS 로그인 성공",
                             Email = model.Email,
                             Token = token,
-                            User = user
+                            User = user,
+                            FamilyMember = familyMember
                         });
 
                     }

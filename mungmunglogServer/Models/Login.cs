@@ -22,5 +22,6 @@ namespace mungmunglogServer.Models
         public string Email { get; set; }
         public string Token { get; set; }
         public User User { get; set; }
+        public FamilyMemberDto FamilyMember { get; set; }
     }
 }

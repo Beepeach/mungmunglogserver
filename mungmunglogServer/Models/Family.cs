@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using mungmunglogServer.Data;
 
 namespace mungmunglogServer.Models
@@ -28,6 +29,10 @@ namespace mungmunglogServer.Models
             FamilyId = family.FamilyId;
             InvitationCode = family.InvitationCode;
             CodeExpirationDate = codeExpirationDateTimeSpan.TotalSeconds;
+
+            // member나 pet이 안들어있다면 오류
+            FamilyMembers = family.FamilyMembers.Select(m => new FamilyMemberDto(m)).ToList();
+            Pets = family.Pets.Select(p => new PetDto(p)).ToList();
         }
 
         public FamilyDto(Family family)
@@ -40,6 +45,10 @@ namespace mungmunglogServer.Models
             FamilyId = family.FamilyId;
             InvitationCode = family.InvitationCode;
             CodeExpirationDate = codeExpirationDateTimeSpan.TotalSeconds;
+
+            // member나 pet이 안들어있다면 오류
+            FamilyMembers = family.FamilyMembers.Select(m => new FamilyMemberDto(m)).ToList();
+            Pets = family.Pets.Select(p => new PetDto(p)).ToList();
         }
 
         public int FamilyId { get; set; }
