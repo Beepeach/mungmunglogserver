@@ -1,6 +1,9 @@
 #Appsettings
 appsettings.json
 
+#Startup
+Startup.cs
+
 # globs
 Makefile.in
 *.userprefs
